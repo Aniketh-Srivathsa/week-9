@@ -7,7 +7,7 @@ pipeline {
             steps {
                 script {
                     // Login to DockerHub
-                    bat 'docker login -u VAnikethSrivathsa -p igotdumped5694'
+                    bat 'docker login -u anikethsrivathsa -p igotdumped5694'
 
                     // Build image
                     bat 'docker build -t w9-dd-app:latest .'
