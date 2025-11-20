@@ -21,25 +21,26 @@ pipeline {
             }
         }
         stage('Deploy') {
-            steps {
-                script {
-                    // Delete and start Minikube cluster
-                    bat 'minikube delete'
-                    bat 'minikube start'
-                    
-                    // Enable the dashboard addon
-                    bat 'minikube addons enable dashboard'
-                    
-                    // Apply Kubernetes resources
-                    bat 'kubectl apply -f my-kube1-deployment.yaml'
-                    bat 'kubectl apply -f my-kube1-service.yaml'
-                    
-                    // Expose the Kubernetes Dashboard service
-                    bat 'minikube dashboard'
-                    
-                    echo 'Deploying application...'
-                }
-            }
+    steps {
+        script {
+            // Delete and start Minikube cluster
+            bat 'minikube delete'
+            bat 'minikube start'
+            
+            // Enable the dashboard addon
+            bat 'minikube addons enable dashboard'
+            
+            // Apply Kubernetes resources
+            bat 'kubectl apply -f my-kube1-deployment.yaml'
+            bat 'kubectl apply -f my-kube1-service.yaml'
+            
+            // Print Dashboard URL instead of trying to open browser
+            bat 'minikube dashboard --url'
+
+            echo 'Deploying application...'
         }
+    }
+}
+
     }
 }
