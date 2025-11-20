@@ -5,7 +5,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    bat 'docker login -u VAnikethSrivathsa -p igotdumped5694'                    
+                    bat 'docker login -u anikethsrivathsa -p igotdumped5694'                    
                     // Build and push Docker image
                     bat 'docker build -t w9-dd-app:latest .'
                     bat 'docker tag w9-dd-app:latest anikethsrivathsa/w9-dh-app:latest'
