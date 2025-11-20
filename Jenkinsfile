@@ -2,17 +2,25 @@ pipeline {
     agent any 
 
     stages {
+
         stage('Build') {
             steps {
                 script {
-                    bat 'docker login -u anikethsrivathsa -p igotdumped5694'                    
-                    // Build and push Docker image
+                    // Login to DockerHub
+                    bat 'docker login -u VAnikethSrivathsa -p igotdumped5694'
+
+                    // Build image
                     bat 'docker build -t w9-dd-app:latest .'
+
+                    // Tag image for DockerHub (repo name must be lowercase)
                     bat 'docker tag w9-dd-app:latest anikethsrivathsa/w9-dh-app:latest'
+
+                    // Push image
                     bat 'docker push anikethsrivathsa/w9-dh-app:latest'
                 }
             }
         }
+
         stage('Test') {
             steps {
                 script {
@@ -20,27 +28,27 @@ pipeline {
                 }
             }
         }
+
         stage('Deploy') {
-    steps {
-        script {
-            // Delete and start Minikube cluster
-            bat 'minikube delete'
-            bat 'minikube start'
-            
-            // Enable the dashboard addon
-            bat 'minikube addons enable dashboard'
-            
-            // Apply Kubernetes resources
-            bat 'kubectl apply -f my-kube1-deployment.yaml'
-            bat 'kubectl apply -f my-kube1-service.yaml'
-            
-            // Print Dashboard URL instead of trying to open browser
-            bat 'minikube dashboard --url'
+            steps {
+                script {
+                    // Fresh Minikube start
+                    bat 'minikube delete'
+                    bat 'minikube start'
 
-            echo 'Deploying application...'
+                    // Enable dashboard addon
+                    bat 'minikube addons enable dashboard'
+
+                    // Apply K8s manifests
+                    bat 'kubectl apply -f my-kube1-deployment.yaml'
+                    bat 'kubectl apply -f my-kube1-service.yaml'
+
+                    // Print Dashboard URL instead of opening browser
+                    bat 'minikube dashboard --url'
+
+                    echo 'Deploying application...'
+                }
+            }
         }
-    }
-}
-
     }
 }
